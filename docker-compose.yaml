@@ -1,0 +1,22 @@
+services:
+  database:
+    image: postgres
+    container_name: activity_service_database
+    restart: always
+    ports:
+      - "5432:${POSTGRES_PORT}"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - local-network
+
+volumes:
+  shared-volume:
+  pgdata:
+
+networks:
+  local-network:
