@@ -1,7 +1,7 @@
 services:
   database:
     image: postgres
-    container_name: activity_service_database
+    container_name: user_service_database
     restart: always
     ports:
       - "5432:${POSTGRES_PORT}"
