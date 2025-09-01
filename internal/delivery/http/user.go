@@ -15,7 +15,7 @@ func NewUserHandler(userUserCase *usecase.UserUseCase) *UserHandler {
 	return &UserHandler{userUserCase: userUserCase}
 }
 
-func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
+func (handler *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 	var input contract.CreateUserContract
 
 	if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
@@ -23,7 +23,7 @@ func (h *UserHandler) CreateUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	output, err := h.userUserCase.CreateUser(r.Context(), input)
+	output, err := handler.userUserCase.CreateUser(r.Context(), input)
 
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
