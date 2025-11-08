@@ -2,9 +2,10 @@ package http
 
 import (
 	"encoding/json"
+	"net/http"
+
 	"github.com/Evensee/user-service/internal/application/contract"
 	"github.com/Evensee/user-service/internal/application/usecase"
-	"net/http"
 )
 
 type UserHandler struct {
