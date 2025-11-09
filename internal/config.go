@@ -2,6 +2,8 @@ package internal
 
 import (
 	"fmt"
+
+	"github.com/evensee/go-tl/dotenv"
 	"github.com/joho/godotenv"
 	"go-simpler.org/env"
 )
@@ -30,4 +32,14 @@ func LoadDatabaseConfig() (*DatabaseConfig, error) {
 	}
 
 	return databaseConfig, nil
+}
+
+type AppConfig struct {
+	Secret string `env:"APP_SECRET"`
+}
+
+func MustLoadAppConfig() *AppConfig {
+	config := dotenv.MakeConfig(new(AppConfig))
+	
+	return config
 }

@@ -1,12 +1,20 @@
 package user
 
-import "context"
+import (
+	"context"
+
+	"github.com/Evensee/user-service/internal"
+)
 
 type DomainUserService struct {
-	userRepo Repository
+	userRepo  Repository
+	appConfig internal.AppConfig
 }
 
-func NewUserDomainService(userRepo Repository) *DomainUserService {
+func NewUserDomainService(
+	userRepo Repository,
+	appConfig *internal.AppConfig,
+) *DomainUserService {
 	return &DomainUserService{userRepo: userRepo}
 }
 

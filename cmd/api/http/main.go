@@ -17,6 +17,8 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+	
+	appConfig := internal.MustLoadAppConfig()
 
 	// Database connection
 	db := database.Connect(*dbConfig)
@@ -25,7 +27,7 @@ func main() {
 	userRepo := repository.NewUserRepository(db)
 
 	// Setup domain service
-	userService := user.NewUserDomainService(userRepo)
+	userService := user.NewUserDomainService(userRepo, appConfig)
 
 	// Setup use case
 	userUserCase := usecase.NewUserUseCase(userService)
