@@ -1,23 +1,54 @@
 package user
 
-import (
-	"context"
-
-	"github.com/Evensee/user-service/internal"
-)
+import "github.com/google/uuid"
 
 type DomainUserService struct {
-	userRepo  Repository
-	appConfig internal.AppConfig
+	userRepo Repository
 }
 
 func NewUserDomainService(
 	userRepo Repository,
-	appConfig *internal.AppConfig,
 ) *DomainUserService {
 	return &DomainUserService{userRepo: userRepo}
 }
 
-func (service *DomainUserService) Create(ctx context.Context, user User) (User, error) {
-	return service.userRepo.Create(ctx, user)
+func (s *DomainUserService) Create(ctx Ctx, createUser *CreateUser) (*User, error) {
+	createUserModel, err := NewUser(createUser)
+	if err != nil {
+		panic(err)
+	}
+	user, err := s.userRepo.Create(ctx, createUserModel)
+	if err != nil {
+		panic(err)
+	}
+
+	return user, err
+}
+
+func (s *DomainUserService) Update(ctx Ctx, user_id uuid.UUID, updateUser *UpdateUser) (*User, error) {
+	user, err := s.userRepo.Update(ctx, user_id, updateUser)
+	if err != nil {
+		panic(err)
+	}
+	return user, err
+}
+
+func (s *DomainUserService) GetAll(ctx Ctx, findUser *FindUser) (*[]User, error) {
+	users, err := s.userRepo.GetAll(ctx, findUser)
+
+	if err != nil {
+		panic(err)
+	}
+
+	return users, err
+}
+
+func (s *DomainUserService) GetOne(ctx Ctx, findUser *FindUser) (*User, error) {
+	user, err := s.userRepo.GetOne(ctx, findUser)
+
+	if err != nil {
+		panic(err)
+	}
+
+	return user, err
 }

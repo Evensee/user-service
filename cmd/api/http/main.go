@@ -1,14 +1,15 @@
 package main
 
 import (
+	"log"
+	"net/http"
+
 	"github.com/Evensee/user-service/internal"
 	"github.com/Evensee/user-service/internal/application/usecase"
 	http2 "github.com/Evensee/user-service/internal/delivery/http"
 	"github.com/Evensee/user-service/internal/domain/user"
 	"github.com/Evensee/user-service/internal/infrastructure/database"
 	"github.com/Evensee/user-service/internal/infrastructure/database/repository"
-	"log"
-	"net/http"
 )
 
 func main() {
@@ -17,11 +18,11 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	
+
 	appConfig := internal.MustLoadAppConfig()
 
 	// Database connection
-	db := database.Connect(*dbConfig)
+	db := database.Connect(dbConfig)
 
 	// Setup repositories
 	userRepo := repository.NewUserRepository(db)

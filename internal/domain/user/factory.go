@@ -1,11 +1,19 @@
 package user
 
-import "github.com/google/uuid"
+import (
+	"github.com/Evensee/user-service/internal/lib/security"
+	"github.com/google/uuid"
+)
 
-func NewUser(email, hashedPassword string) (*User, error) {
+func NewUser(createUser *CreateUser) (*User, error) {
+	hashedPassword, err := security.HashPassword(*createUser.Password)
+
 	return &User{
-		ID:             uuid.NewString(),
-		Email:          email,
+		ID:             uuid.New(),
+		Email:          createUser.Email,
+		FirstName:      createUser.FirstName,
+		LastName:       createUser.LastName,
+		AvatarUrl:      createUser.AvatarUrl,
 		HashedPassword: hashedPassword,
-	}, nil
+	}, err
 }

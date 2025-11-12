@@ -2,7 +2,7 @@ package repository
 
 import (
 	"context"
-	"errors"
+
 	"github.com/Evensee/user-service/internal/domain/user"
 	"github.com/Evensee/user-service/internal/infrastructure/database/mapper"
 	"github.com/Evensee/user-service/internal/infrastructure/database/model"
@@ -12,38 +12,90 @@ import (
 
 type UserRepository struct {
 	db *gorm.DB
+	user.Repository
 }
 
-func NewUserRepository(db *gorm.DB) *UserRepository {
-	return &UserRepository{db: db}
+type Ctx = context.Context
+
+func NewUserRepository(db *gorm.DB) UserRepository {
+	return UserRepository{
+		db: db,
+	}
 }
 
-func (r *UserRepository) GetById(ctx context.Context, id string) (user.User, error) {
-	var userOrm model.UserORMModel
+func (r UserRepository) CreateUser(
+	ctx Ctx,
+	createUser *user.User,
+) (*user.User, error) {
+	userModel := mapper.MapToOrm(createUser)
 
-	uid, err := uuid.Parse(id)
+	result := r.db.WithContext(ctx).Create(&userModel)
 
-	if err != nil {
-		return user.User{}, err
-	}
-
-	if err := r.db.WithContext(ctx).First(&userOrm, "id = ?", uid).Error; err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return user.User{}, user.ErrorUserNotFound
-		}
-
-		return user.User{}, err
-	}
-
-	return mapper.MapToDomain(userOrm), nil
+	return mapper.MapToDomain(&userModel), result.Error
 }
 
-func (r *UserRepository) Create(ctx context.Context, userDomain user.User) (user.User, error) {
-	userOrm := mapper.MapToOrm(userDomain)
+func (r UserRepository) GetUsers(
+	ctx Ctx,
+	findUser user.FindUser,
+) (*[]user.User, error) {
+	users := make([]model.UserORMModel, 0)
 
-	if err := r.db.WithContext(ctx).Create(&userOrm).Error; err != nil {
-		return user.User{}, err
+	result := r.db.WithContext(ctx).Find(&users)
+
+	if result.Error != nil {
+		panic(result.Error)
 	}
 
-	return mapper.MapToDomain(userOrm), nil
+	mappedUsers := make([]user.User, 0, len(users))
+
+	for _, u := range users {
+		mappedUsers = append(
+			mappedUsers,
+			*mapper.MapToDomain(&u),
+		)
+	}
+
+	return &mappedUsers, result.Error
+}
+
+func (r UserRepository) GetUser(ctx Ctx, userId uuid.UUID) (*user.User, error) {
+	u := model.UserORMModel{
+		ID: userId,
+	}
+
+	result := r.db.WithContext(ctx).First(&u)
+
+	if result.Error != nil {
+		panic(result.Error)
+	}
+
+	return mapper.MapToDomain(&u), result.Error
+}
+
+func (r UserRepository) UpdateUser(
+	ctx Ctx,
+	userId uuid.UUID,
+	updateUser *user.UpdateUser,
+) (*user.User, error) {
+	u := model.UserORMModel{
+		ID: userId,
+	}
+
+	result := r.db.WithContext(ctx).Model(&u).Where("id = ?", userId).Updates(updateUser)
+	r.db.First(&u)
+
+	return mapper.MapToDomain(&u), result.Error
+}
+
+func (r UserRepository) DeleteUser(
+	ctx Ctx,
+	userId uuid.UUID,
+) error {
+	u := model.UserORMModel{
+		ID: userId,
+	}
+	r.db.First(&u)
+	result := r.db.WithContext(ctx).Delete(&u)
+
+	return result.Error
 }

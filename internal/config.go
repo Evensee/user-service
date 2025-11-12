@@ -15,6 +15,7 @@ type DatabaseConfig struct {
 	User     string `env:"POSTGRES_USER"`
 	Password string `env:"POSTGRES_PASSWORD"`
 
+	
 	DatabaseName string `env:"POSTGRES_DB"`
 
 	AutoMigrate bool `env:"AUTO_MIGRATE"`
@@ -36,6 +37,9 @@ func LoadDatabaseConfig() (*DatabaseConfig, error) {
 
 type AppConfig struct {
 	Secret string `env:"APP_SECRET"`
+	
+	GrpcApiPort int `env:"USER_SERVICE_GRPC_API_PORT"`
+	HttpApiPort int `env:"USER_SERVICE_HTTP_API_PORT"`
 }
 
 func MustLoadAppConfig() *AppConfig {
