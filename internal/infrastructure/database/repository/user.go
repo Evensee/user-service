@@ -17,30 +17,28 @@ type UserRepository struct {
 
 type Ctx = context.Context
 
-func NewUserRepository(db *gorm.DB) UserRepository {
+func NewUserRepository(db *gorm.DB) user.Repository {
 	return UserRepository{
 		db: db,
 	}
 }
 
 func (r UserRepository) CreateUser(
-	ctx Ctx,
 	createUser *user.User,
 ) (*user.User, error) {
 	userModel := mapper.MapToOrm(createUser)
 
-	result := r.db.WithContext(ctx).Create(&userModel)
+	result := r.db.Create(&userModel)
 
 	return mapper.MapToDomain(&userModel), result.Error
 }
 
 func (r UserRepository) GetUsers(
-	ctx Ctx,
 	findUser user.FindUser,
 ) (*[]user.User, error) {
 	users := make([]model.UserORMModel, 0)
 
-	result := r.db.WithContext(ctx).Find(&users)
+	result := r.db.Find(&users)
 
 	if result.Error != nil {
 		panic(result.Error)
@@ -58,12 +56,12 @@ func (r UserRepository) GetUsers(
 	return &mappedUsers, result.Error
 }
 
-func (r UserRepository) GetUser(ctx Ctx, userId uuid.UUID) (*user.User, error) {
+func (r UserRepository) GetUser(userId uuid.UUID) (*user.User, error) {
 	u := model.UserORMModel{
 		ID: userId,
 	}
 
-	result := r.db.WithContext(ctx).First(&u)
+	result := r.db.First(&u)
 
 	if result.Error != nil {
 		panic(result.Error)
@@ -73,7 +71,6 @@ func (r UserRepository) GetUser(ctx Ctx, userId uuid.UUID) (*user.User, error) {
 }
 
 func (r UserRepository) UpdateUser(
-	ctx Ctx,
 	userId uuid.UUID,
 	updateUser *user.UpdateUser,
 ) (*user.User, error) {
@@ -81,21 +78,20 @@ func (r UserRepository) UpdateUser(
 		ID: userId,
 	}
 
-	result := r.db.WithContext(ctx).Model(&u).Where("id = ?", userId).Updates(updateUser)
+	result := r.db.Model(&u).Where("id = ?", userId).Updates(updateUser)
 	r.db.First(&u)
 
 	return mapper.MapToDomain(&u), result.Error
 }
 
 func (r UserRepository) DeleteUser(
-	ctx Ctx,
 	userId uuid.UUID,
 ) error {
 	u := model.UserORMModel{
 		ID: userId,
 	}
 	r.db.First(&u)
-	result := r.db.WithContext(ctx).Delete(&u)
+	result := r.db.Delete(&u)
 
 	return result.Error
 }

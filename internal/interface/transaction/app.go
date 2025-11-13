@@ -3,16 +3,20 @@ package transaction
 import (
 	"context"
 
+	"github.com/redis/go-redis/v9"
 	"gorm.io/gorm"
 )
 
+type Ctx = context.Context
+
 type AppTransaction interface {
 	GetOrmTx() *gorm.DB
-	CloseTransaction()
+	GetMemoryTx() redis.Pipeliner
+	CloseTransaction(ctx Ctx)
 }
 
 type CreateAppTransactionResolver interface {
-	CreateAppTransaction(context.Context) AppTransaction
+	CreateAppTransaction(Ctx) AppTransaction
 }
 
-type CreateAppTransaction func(context.Context) AppTransaction
+type CreateAppTransaction func(Ctx) AppTransaction

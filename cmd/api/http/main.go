@@ -19,7 +19,7 @@ func main() {
 		panic(err)
 	}
 
-	appConfig := internal.MustLoadAppConfig()
+	appConfig := internal.MustLoadConfig()
 
 	// Database connection
 	db := database.Connect(dbConfig)

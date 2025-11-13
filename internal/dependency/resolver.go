@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/Evensee/user-service/internal"
+	"github.com/Evensee/user-service/internal/interface/resolver"
 	"github.com/Evensee/user-service/internal/interface/service"
 	"github.com/Evensee/user-service/internal/interface/transaction"
 	"gorm.io/gorm"
@@ -13,7 +14,7 @@ type Resolver struct {
 	db *gorm.DB
 }
 
-func NewResolver(db *gorm.DB) Resolver {
+func NewResolver(db *gorm.DB) resolver.AppResolver {
 	return Resolver{
 		db: db,
 	}

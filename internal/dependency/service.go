@@ -2,8 +2,10 @@ package dependency
 
 import (
 	"github.com/Evensee/user-service/internal"
+	"github.com/Evensee/user-service/internal/domain/auth"
 	"github.com/Evensee/user-service/internal/domain/user"
-	"github.com/Evensee/user-service/internal/infrastructure/database/repository"
+	databaseRepo "github.com/Evensee/user-service/internal/infrastructure/database/repository"
+	memoryRepo "github.com/Evensee/user-service/internal/infrastructure/memory/repository"
 	"github.com/Evensee/user-service/internal/interface/transaction"
 	"gorm.io/gorm"
 )
@@ -11,6 +13,7 @@ import (
 type AppService struct {
 	dbConnection *gorm.DB
 	userService  user.DomainUserService
+	authService  auth.AuthService
 }
 
 func (s AppService) GetUserService() user.DomainUserService {
@@ -19,11 +22,16 @@ func (s AppService) GetUserService() user.DomainUserService {
 
 func CreateAppService(appTransaction transaction.AppTransaction, config *internal.AppConfig) AppService {
 	db := appTransaction.GetOrmTx()
+	rdb := appTransaction.GetMemoryTx()
 
 	return AppService{
 		dbConnection: db,
 		userService: *user.NewUserDomainService(
-			repository.NewUserRepository(db),
+			databaseRepo.NewUserRepository(db),
+		),
+		authService: *auth.NewAuthService(
+			memoryRepo.NewAuthTokenRepository(rdb),
+			databaseRepo.NewUserRepository(db),
 			config,
 		),
 	}

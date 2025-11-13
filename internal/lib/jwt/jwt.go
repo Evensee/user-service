@@ -8,7 +8,11 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
-func NewToken(user user.User, appConfig internal.AppConfig, duration time.Duration) (string, error) {
+func NewToken(
+	user *user.User, 
+	appConfig *internal.AppConfig, 
+	duration time.Duration,
+) (string, error) {
 	token := jwt.New(jwt.SigningMethodHS256)
 
 	claims := token.Claims.(jwt.MapClaims)
@@ -22,4 +26,32 @@ func NewToken(user user.User, appConfig internal.AppConfig, duration time.Durati
 		return "", err
 	}
 	return tokenString, nil
+}
+
+func GenerateAccessToken(u *user.User, appConfig *internal.AppConfig) (string, error) {
+	accessTokenLifetime := time.Second * time.Duration(appConfig.AccessTokenLifetimeSeconds)
+	return NewToken(u, appConfig, accessTokenLifetime)
+}
+
+func GenerateRefreshToken(u *user.User, appConfig *internal.AppConfig) (string, error) {
+	refreshTokenLifetime := time.Second * time.Duration(appConfig.RefreshTokenLifetimeSeconds)
+	return NewToken(u, appConfig, refreshTokenLifetime)
+}
+
+func GenerateOAuthTokens(u *user.User, appConfig *internal.AppConfig) (
+	accessToken,
+	refreshToken string,
+	err error,
+) {
+	accessToken, err = GenerateAccessToken(u, appConfig)
+	if err != nil {
+		return "", "", err
+	}
+
+	refreshToken, err = GenerateRefreshToken(u, appConfig)
+	if err != nil {
+		return "", "", err
+	}
+
+	return accessToken, refreshToken, nil
 }

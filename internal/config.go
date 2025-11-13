@@ -15,7 +15,6 @@ type DatabaseConfig struct {
 	User     string `env:"POSTGRES_USER"`
 	Password string `env:"POSTGRES_PASSWORD"`
 
-	
 	DatabaseName string `env:"POSTGRES_DB"`
 
 	AutoMigrate bool `env:"AUTO_MIGRATE"`
@@ -37,13 +36,23 @@ func LoadDatabaseConfig() (*DatabaseConfig, error) {
 
 type AppConfig struct {
 	Secret string `env:"APP_SECRET"`
-	
+
 	GrpcApiPort int `env:"USER_SERVICE_GRPC_API_PORT"`
 	HttpApiPort int `env:"USER_SERVICE_HTTP_API_PORT"`
+
+	AccessTokenLifetimeSeconds  int `env:"ACCESS_TOKEN_LIFETIME_SECONDS"`
+	RefreshTokenLifetimeSeconds int `env:"REFRESH_TOKEN_LIFETIME_SECONDS"`
 }
 
-func MustLoadAppConfig() *AppConfig {
-	config := dotenv.MakeConfig(new(AppConfig))
-	
+type RedisConfig struct {
+	Host     string `env:"REDIS_HOST"`
+	Port     int    `env:"REDIS_PORT"`
+	Password string `env:"REDIS_PASSWORD"`
+	Db int `env:"REDIS_DB"`
+}
+
+func MustLoadConfig[C any]() *C {
+	config := dotenv.MakeConfig(new(C))
+
 	return config
 }

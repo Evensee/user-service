@@ -25,3 +25,4 @@ func Connect(databaseConfig *internal.DatabaseConfig) *gorm.DB {
 
 	return connection
 }
+
