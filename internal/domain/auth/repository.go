@@ -1,15 +1,16 @@
 package auth
 
 import (
-	"context"
-
 	"github.com/google/uuid"
 )
 
 type Repository interface {
-	Save(context.Context, uuid.UUID, Tokens) error
-	GetUserIDByAccessToken(context.Context, string) (uuid.UUID, error)
-	GetUserIDByRefreshToken(context.Context, string) (uuid.UUID, error)
-	DeleteAccessToken(context.Context, string) error
-	DeleteRefreshToken(context.Context, string) error
-}
+	Save(Ctx, uuid.UUID, Tokens) error
+	GetUserIDByAccessToken(Ctx, string) (uuid.UUID, error)
+	GetUserIDByRefreshToken(Ctx, string) (uuid.UUID, error)
+	DeleteAccessToken(Ctx, string) error
+	DeleteRefreshToken(Ctx, string) error
+	BlockAccessToken(Ctx, string, uuid.UUID)
+	BlockRefreshToken(Ctx, string, uuid.UUID)
+	CheckAccessTokenBlocked(Ctx, string) (*uuid.UUID, error)
+	CheckRefreshTokenBlocked(Ctx, string) (*uuid.UUID, error)

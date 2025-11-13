@@ -1,6 +1,7 @@
 package api
 
 import (
+	"github.com/Evensee/user-service/internal/delivery/grpc/handler"
 	"github.com/Evensee/user-service/internal/interface/resolver"
 	"github.com/Evensee/user-service/protobuf_generated/user"
 	"google.golang.org/grpc"
@@ -9,6 +10,7 @@ import (
 type serverApi struct {
 	user.UnimplementedUserServiceServer
 	appResolver resolver.AppResolver
+	handler.ServerApi
 }
 
 func New(appResolver resolver.AppResolver) *serverApi {

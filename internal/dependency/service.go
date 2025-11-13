@@ -20,6 +20,10 @@ func (s AppService) GetUserService() user.DomainUserService {
 	return s.userService
 }
 
+func (s AppService) GetAuthService() auth.AuthService {
+	return s.authService
+}
+
 func CreateAppService(appTransaction transaction.AppTransaction, config *internal.AppConfig) AppService {
 	db := appTransaction.GetOrmTx()
 	rdb := appTransaction.GetMemoryTx()

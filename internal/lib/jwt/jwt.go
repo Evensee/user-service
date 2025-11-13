@@ -1,23 +1,24 @@
 package jwt
 
 import (
+	"errors"
 	"time"
 
 	"github.com/Evensee/user-service/internal"
 	"github.com/Evensee/user-service/internal/domain/user"
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/google/uuid"
 )
 
 func NewToken(
-	user *user.User, 
-	appConfig *internal.AppConfig, 
+	user *user.User,
+	appConfig *internal.AppConfig,
 	duration time.Duration,
 ) (string, error) {
 	token := jwt.New(jwt.SigningMethodHS256)
 
 	claims := token.Claims.(jwt.MapClaims)
 	claims["uid"] = user.ID
-	claims["email"] = user.Email
 	claims["exp"] = time.Now().Add(duration).Unix()
 
 	tokenString, err := token.SignedString([]byte(appConfig.Secret))
@@ -54,4 +55,36 @@ func GenerateOAuthTokens(u *user.User, appConfig *internal.AppConfig) (
 	}
 
 	return accessToken, refreshToken, nil
+}
+
+func ValidateAccessToken(
+	tokenStr string, 
+	appConfig *internal.AppConfig
+) (
+	uid uuid.UUID, 
+	error,
+) {
+	token, err := jwt.ParseWithClaims(
+		tokenStr,
+		&jwt.MapClaims{},
+		func(token *jwt.Token) (any, error) {
+			return []byte(appConfig.Secret), nil
+		}
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	claims, ok := token.Claims.(*jwt.MapClaims)
+	if !ok || !token.Valid {
+		return nil, errors.New("invalid token")
+	}
+	
+	userId := claims["uid"]
+	userUUID, err := uuid.Parse(userId)
+	if err != nil {
+		return nil, err
+	}
+
+	return userUUID, nil
 }

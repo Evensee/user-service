@@ -7,11 +7,13 @@ import (
 	"github.com/Evensee/user-service/internal/interface/resolver"
 	"github.com/Evensee/user-service/internal/interface/service"
 	"github.com/Evensee/user-service/internal/interface/transaction"
+	"github.com/redis/go-redis/v9"
 	"gorm.io/gorm"
 )
 
 type Resolver struct {
-	db *gorm.DB
+	db  *gorm.DB
+	rdb *redis.Client
 }
 
 func NewResolver(db *gorm.DB) resolver.AppResolver {
@@ -25,5 +27,5 @@ func (r Resolver) CreateAppService(appTransaction transaction.AppTransaction, co
 }
 
 func (r Resolver) CreateAppTransaction(ctx context.Context) transaction.AppTransaction {
-	return StartTransaction(r.db, ctx)
+	return StartTransaction(r.db, ctx, r.rdb)
 }
