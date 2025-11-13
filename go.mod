@@ -3,7 +3,7 @@ module github.com/Evensee/user-service
 go 1.25.1
 
 require (
-	github.com/evensee/go-tl v0.0.8
+	github.com/evensee/go-tl v0.0.10
 	github.com/golang-jwt/jwt/v5 v5.3.0
 	github.com/google/uuid v1.6.0
 	github.com/joho/godotenv v1.5.1

@@ -7,7 +7,7 @@ type CreateUser struct {
 	FirstName string  `json:"firstName" validate:"required"`
 	LastName  string  `json:"lastName" validate:"required"`
 	AvatarUrl *string `json:"avatarUrl"`
-	Password  *string `json:"password" validate:"required"`
+	Password  string  `json:"password" validate:"required"`
 }
 
 type UpdateUser struct {

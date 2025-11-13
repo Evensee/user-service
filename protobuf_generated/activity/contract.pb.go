@@ -213,7 +213,7 @@ func (x *IdempotentRequest) GetDeduplicationId() string {
 
 type GetActivitiesRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	Base          *BaseRequest           `protobuf:"bytes,1,opt,name=base,proto3" json:"base,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -248,11 +248,11 @@ func (*GetActivitiesRequest) Descriptor() ([]byte, []int) {
 	return file_activity_contract_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *GetActivitiesRequest) GetUserId() string {
+func (x *GetActivitiesRequest) GetBase() *BaseRequest {
 	if x != nil {
-		return x.UserId
+		return x.Base
 	}
-	return ""
+	return nil
 }
 
 type CreateActivityRequest struct {
@@ -379,10 +379,10 @@ type UpdateActivityRequest struct {
 	state           protoimpl.MessageState `protogen:"open.v1"`
 	Base            *IdempotentRequest     `protobuf:"bytes,1,opt,name=base,proto3" json:"base,omitempty"`
 	ActivityId      uint64                 `protobuf:"varint,2,opt,name=activity_id,json=activityId,proto3" json:"activity_id,omitempty"`
-	IsActive        bool                   `protobuf:"varint,3,opt,name=is_active,json=isActive,proto3" json:"is_active,omitempty"`
-	Name            string                 `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
-	Description     string                 `protobuf:"bytes,5,opt,name=description,proto3" json:"description,omitempty"`
-	ActivityPlaceId uint64                 `protobuf:"varint,6,opt,name=activity_place_id,json=activityPlaceId,proto3" json:"activity_place_id,omitempty"`
+	IsActive        *bool                  `protobuf:"varint,3,opt,name=is_active,json=isActive,proto3,oneof" json:"is_active,omitempty"`
+	Name            *string                `protobuf:"bytes,4,opt,name=name,proto3,oneof" json:"name,omitempty"`
+	Description     *string                `protobuf:"bytes,5,opt,name=description,proto3,oneof" json:"description,omitempty"`
+	ActivityPlaceId *uint64                `protobuf:"varint,6,opt,name=activity_place_id,json=activityPlaceId,proto3,oneof" json:"activity_place_id,omitempty"`
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
 }
@@ -432,29 +432,29 @@ func (x *UpdateActivityRequest) GetActivityId() uint64 {
 }
 
 func (x *UpdateActivityRequest) GetIsActive() bool {
-	if x != nil {
-		return x.IsActive
+	if x != nil && x.IsActive != nil {
+		return *x.IsActive
 	}
 	return false
 }
 
 func (x *UpdateActivityRequest) GetName() string {
-	if x != nil {
-		return x.Name
+	if x != nil && x.Name != nil {
+		return *x.Name
 	}
 	return ""
 }
 
 func (x *UpdateActivityRequest) GetDescription() string {
-	if x != nil {
-		return x.Description
+	if x != nil && x.Description != nil {
+		return *x.Description
 	}
 	return ""
 }
 
 func (x *UpdateActivityRequest) GetActivityPlaceId() uint64 {
-	if x != nil {
-		return x.ActivityPlaceId
+	if x != nil && x.ActivityPlaceId != nil {
+		return *x.ActivityPlaceId
 	}
 	return 0
 }
@@ -671,9 +671,9 @@ const file_activity_contract_proto_rawDesc = "" +
 	"\auser_id\x18\x01 \x01(\tR\x06userId\"W\n" +
 	"\x11IdempotentRequest\x12\x17\n" +
 	"\auser_id\x18\x01 \x01(\tR\x06userId\x12)\n" +
-	"\x10deduplication_id\x18\x02 \x01(\tR\x0fdeduplicationId\"/\n" +
-	"\x14GetActivitiesRequest\x12\x17\n" +
-	"\auser_id\x18\x01 \x01(\tR\x06userId\"\xb2\x01\n" +
+	"\x10deduplication_id\x18\x02 \x01(\tR\x0fdeduplicationId\"I\n" +
+	"\x14GetActivitiesRequest\x121\n" +
+	"\x04base\x18\x01 \x01(\v2\x1d.activity_service.BaseRequestR\x04base\"\xb2\x01\n" +
 	"\x15CreateActivityRequest\x127\n" +
 	"\x04base\x18\x01 \x01(\v2#.activity_service.IdempotentRequestR\x04base\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12 \n" +
@@ -682,15 +682,20 @@ const file_activity_contract_proto_rawDesc = "" +
 	"\x12GetActivityRequest\x121\n" +
 	"\x04base\x18\x01 \x01(\v2\x1d.activity_service.BaseRequestR\x04base\x12\x1f\n" +
 	"\vactivity_id\x18\x02 \x01(\x04R\n" +
-	"activityId\"\xf0\x01\n" +
+	"activityId\"\xc1\x02\n" +
 	"\x15UpdateActivityRequest\x127\n" +
 	"\x04base\x18\x01 \x01(\v2#.activity_service.IdempotentRequestR\x04base\x12\x1f\n" +
 	"\vactivity_id\x18\x02 \x01(\x04R\n" +
-	"activityId\x12\x1b\n" +
-	"\tis_active\x18\x03 \x01(\bR\bisActive\x12\x12\n" +
-	"\x04name\x18\x04 \x01(\tR\x04name\x12 \n" +
-	"\vdescription\x18\x05 \x01(\tR\vdescription\x12*\n" +
-	"\x11activity_place_id\x18\x06 \x01(\x04R\x0factivityPlaceId\"q\n" +
+	"activityId\x12 \n" +
+	"\tis_active\x18\x03 \x01(\bH\x00R\bisActive\x88\x01\x01\x12\x17\n" +
+	"\x04name\x18\x04 \x01(\tH\x01R\x04name\x88\x01\x01\x12%\n" +
+	"\vdescription\x18\x05 \x01(\tH\x02R\vdescription\x88\x01\x01\x12/\n" +
+	"\x11activity_place_id\x18\x06 \x01(\x04H\x03R\x0factivityPlaceId\x88\x01\x01B\f\n" +
+	"\n" +
+	"_is_activeB\a\n" +
+	"\x05_nameB\x0e\n" +
+	"\f_descriptionB\x14\n" +
+	"\x12_activity_place_id\"q\n" +
 	"\x15DeleteActivityRequest\x127\n" +
 	"\x04base\x18\x01 \x01(\v2#.activity_service.IdempotentRequestR\x04base\x12\x1f\n" +
 	"\vactivity_id\x18\x02 \x01(\x04R\n" +
@@ -742,30 +747,31 @@ var file_activity_contract_proto_goTypes = []any{
 var file_activity_contract_proto_depIdxs = []int32{
 	11, // 0: activity_service.Activity.created_at:type_name -> google.protobuf.Timestamp
 	11, // 1: activity_service.Activity.updated_at:type_name -> google.protobuf.Timestamp
-	2,  // 2: activity_service.CreateActivityRequest.base:type_name -> activity_service.IdempotentRequest
-	1,  // 3: activity_service.GetActivityRequest.base:type_name -> activity_service.BaseRequest
-	2,  // 4: activity_service.UpdateActivityRequest.base:type_name -> activity_service.IdempotentRequest
-	2,  // 5: activity_service.DeleteActivityRequest.base:type_name -> activity_service.IdempotentRequest
-	2,  // 6: activity_service.RegisterUserActivityRequest.base:type_name -> activity_service.IdempotentRequest
-	0,  // 7: activity_service.ActivityResponse.data:type_name -> activity_service.Activity
-	0,  // 8: activity_service.ActivitiesResponse.data:type_name -> activity_service.Activity
-	4,  // 9: activity_service.ActivityService.CreateActivity:input_type -> activity_service.CreateActivityRequest
-	3,  // 10: activity_service.ActivityService.GetActivities:input_type -> activity_service.GetActivitiesRequest
-	5,  // 11: activity_service.ActivityService.GetActivity:input_type -> activity_service.GetActivityRequest
-	6,  // 12: activity_service.ActivityService.UpdateActivity:input_type -> activity_service.UpdateActivityRequest
-	7,  // 13: activity_service.ActivityService.DeleteActivity:input_type -> activity_service.DeleteActivityRequest
-	8,  // 14: activity_service.ActivityService.RegisterUserActivity:input_type -> activity_service.RegisterUserActivityRequest
-	9,  // 15: activity_service.ActivityService.CreateActivity:output_type -> activity_service.ActivityResponse
-	10, // 16: activity_service.ActivityService.GetActivities:output_type -> activity_service.ActivitiesResponse
-	9,  // 17: activity_service.ActivityService.GetActivity:output_type -> activity_service.ActivityResponse
-	9,  // 18: activity_service.ActivityService.UpdateActivity:output_type -> activity_service.ActivityResponse
-	12, // 19: activity_service.ActivityService.DeleteActivity:output_type -> google.protobuf.Empty
-	9,  // 20: activity_service.ActivityService.RegisterUserActivity:output_type -> activity_service.ActivityResponse
-	15, // [15:21] is the sub-list for method output_type
-	9,  // [9:15] is the sub-list for method input_type
-	9,  // [9:9] is the sub-list for extension type_name
-	9,  // [9:9] is the sub-list for extension extendee
-	0,  // [0:9] is the sub-list for field type_name
+	1,  // 2: activity_service.GetActivitiesRequest.base:type_name -> activity_service.BaseRequest
+	2,  // 3: activity_service.CreateActivityRequest.base:type_name -> activity_service.IdempotentRequest
+	1,  // 4: activity_service.GetActivityRequest.base:type_name -> activity_service.BaseRequest
+	2,  // 5: activity_service.UpdateActivityRequest.base:type_name -> activity_service.IdempotentRequest
+	2,  // 6: activity_service.DeleteActivityRequest.base:type_name -> activity_service.IdempotentRequest
+	2,  // 7: activity_service.RegisterUserActivityRequest.base:type_name -> activity_service.IdempotentRequest
+	0,  // 8: activity_service.ActivityResponse.data:type_name -> activity_service.Activity
+	0,  // 9: activity_service.ActivitiesResponse.data:type_name -> activity_service.Activity
+	4,  // 10: activity_service.ActivityService.CreateActivity:input_type -> activity_service.CreateActivityRequest
+	3,  // 11: activity_service.ActivityService.GetActivities:input_type -> activity_service.GetActivitiesRequest
+	5,  // 12: activity_service.ActivityService.GetActivity:input_type -> activity_service.GetActivityRequest
+	6,  // 13: activity_service.ActivityService.UpdateActivity:input_type -> activity_service.UpdateActivityRequest
+	7,  // 14: activity_service.ActivityService.DeleteActivity:input_type -> activity_service.DeleteActivityRequest
+	8,  // 15: activity_service.ActivityService.RegisterUserActivity:input_type -> activity_service.RegisterUserActivityRequest
+	9,  // 16: activity_service.ActivityService.CreateActivity:output_type -> activity_service.ActivityResponse
+	10, // 17: activity_service.ActivityService.GetActivities:output_type -> activity_service.ActivitiesResponse
+	9,  // 18: activity_service.ActivityService.GetActivity:output_type -> activity_service.ActivityResponse
+	9,  // 19: activity_service.ActivityService.UpdateActivity:output_type -> activity_service.ActivityResponse
+	12, // 20: activity_service.ActivityService.DeleteActivity:output_type -> google.protobuf.Empty
+	9,  // 21: activity_service.ActivityService.RegisterUserActivity:output_type -> activity_service.ActivityResponse
+	16, // [16:22] is the sub-list for method output_type
+	10, // [10:16] is the sub-list for method input_type
+	10, // [10:10] is the sub-list for extension type_name
+	10, // [10:10] is the sub-list for extension extendee
+	0,  // [0:10] is the sub-list for field type_name
 }
 
 func init() { file_activity_contract_proto_init() }
@@ -773,6 +779,7 @@ func file_activity_contract_proto_init() {
 	if File_activity_contract_proto != nil {
 		return
 	}
+	file_activity_contract_proto_msgTypes[6].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{

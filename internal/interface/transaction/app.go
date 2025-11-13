@@ -18,5 +18,3 @@ type AppTransaction interface {
 type CreateAppTransactionResolver interface {
 	CreateAppTransaction(Ctx) AppTransaction
 }
-
-type CreateAppTransaction func(Ctx) AppTransaction

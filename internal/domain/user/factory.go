@@ -6,7 +6,7 @@ import (
 )
 
 func NewUser(createUser *CreateUser) (*User, error) {
-	hashedPassword, err := security.HashPassword(*createUser.Password)
+	hashedPassword, err := security.HashPassword(createUser.Password)
 
 	return &User{
 		ID:             uuid.New(),

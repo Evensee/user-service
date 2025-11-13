@@ -15,13 +15,12 @@ func MapUserDomainToGrpcModel(user *user.User) *p.UserResponse {
 	}
 }
 
-
 func MapCreateUserGrpcToDomainModel(req *p.CreateUserRequest) *user.CreateUser {
 	return &user.CreateUser{
-		Email: req.Email,
+		Email:     req.Email,
 		FirstName: req.FirstName,
-		LastName: req.LastName,
+		LastName:  req.LastName,
 		AvatarUrl: req.AvatarUrl,
-		Password: req.Pass,
+		Password:  req.Password,
 	}
 }

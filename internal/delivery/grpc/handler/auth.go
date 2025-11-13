@@ -18,9 +18,9 @@ func (s *ServerApi) LoginUser(ctx context.Context, req *p.LoginRequest) (*p.Toke
 		authService := appService.GetAuthService()
 
 		tokens, err := authService.LoginUser(ctx, req.Email, req.Password)
-		
+
 		return &p.TokensResponse{
-			AccessToken: tokens.AccessToken,
+			AccessToken:  tokens.AccessToken,
 			RefreshToken: tokens.RefreshToken,
 		}, err
 	}
@@ -40,9 +40,9 @@ func (s *ServerApi) LogoutUser(ctx context.Context, req *p.LogoutRequest) (*empt
 		appService service.AppService,
 	) (*emptypb.Empty, error) {
 		authService := appService.GetAuthService()
-		
+
 		err := authService.LogoutUser(ctx, req.AccessToken, req.RefreshToken)
-		
+
 		return new(emptypb.Empty), err
 	}
 
@@ -61,8 +61,16 @@ func (s *ServerApi) ValidateTokens(ctx context.Context, req *p.ValidateTokensReq
 		appService service.AppService,
 	) (*p.ValidateTokensResponse, error) {
 		authService := appService.GetAuthService()
-		
-		authService.
+
+		user, err := authService.ValidateAccessToken(ctx, req.AccessToken)
+
+		if err != nil {
+			return new(p.ValidateTokensResponse), err
+		}
+
+		return &p.ValidateTokensResponse{
+			UserId: user.ID.String(),
+		}, nil
 	}
 
 	resolvedHandler := api.GrpcApiHandlerFactory(
@@ -79,7 +87,17 @@ func (s *ServerApi) RefreshTokens(ctx context.Context, req *p.RefreshTokensReque
 		req *p.RefreshTokensRequest,
 		appService service.AppService,
 	) (*p.TokensResponse, error) {
-		userService := appService.GetUserService()
+		authService := appService.GetAuthService()
+
+		tokens, err := authService.RefreshTokens(ctx, req.RefreshToken)
+
+		if err != nil {
+			return new(p.TokensResponse), nil
+		}
+		return &p.TokensResponse{
+			AccessToken:  tokens.AccessToken,
+			RefreshToken: tokens.RefreshToken,
+		}, nil
 	}
 
 	resolvedHandler := api.GrpcApiHandlerFactory(

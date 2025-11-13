@@ -14,3 +14,4 @@ type Repository interface {
 	BlockRefreshToken(Ctx, string, uuid.UUID)
 	CheckAccessTokenBlocked(Ctx, string) (*uuid.UUID, error)
 	CheckRefreshTokenBlocked(Ctx, string) (*uuid.UUID, error)
+}

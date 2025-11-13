@@ -121,7 +121,7 @@ func (s *AuthService) ValidateAccessToken(ctx Ctx, accessToken string) (*user.Us
 	}
 
 	u, err := s.userRepo.GetOne(ctx, &user.FindUser{
-		ID: &userId,
+		ID: userId,
 	})
 	if err != nil {
 		return nil, err

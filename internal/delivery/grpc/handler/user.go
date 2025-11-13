@@ -9,7 +9,6 @@ import (
 	p "github.com/Evensee/user-service/protobuf_generated/user"
 	"github.com/evensee/go-tl/api"
 	"github.com/google/uuid"
-	"google.golang.org/protobuf/types/known/emptypb"
 )
 
 type (
@@ -52,8 +51,14 @@ func (s *ServerApi) CreateUser(ctx context.Context, req *p.CreateUserRequest) (*
 		appService service.AppService,
 	) (*p.UserResponse, error) {
 		userService := appService.GetUserService()
-		
-		userService.Create(ctx, )
+
+		createUserModel := mapper.MapCreateUserGrpcToDomainModel(req)
+		user, err := userService.Create(ctx, createUserModel)
+		if err != nil {
+			return new(p.UserResponse), nil
+		}
+
+		return mapper.MapUserDomainToGrpcModel(user), nil
 	}
 
 	resolvedHandler := api.GrpcApiHandlerFactory(

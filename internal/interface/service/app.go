@@ -1,7 +1,6 @@
 package service
 
 import (
-	"github.com/Evensee/user-service/internal"
 	"github.com/Evensee/user-service/internal/domain/auth"
 	"github.com/Evensee/user-service/internal/domain/user"
 	"github.com/Evensee/user-service/internal/interface/transaction"
@@ -13,7 +12,5 @@ type AppService interface {
 }
 
 type CreateAppServiceResolver interface {
-	CreateAppService(transaction.AppTransaction, *internal.AppConfig) AppService
+	CreateAppService(transaction.AppTransaction) AppService
 }
-
-type CreateAppService func(transaction.AppTransaction, *internal.AppConfig) AppService

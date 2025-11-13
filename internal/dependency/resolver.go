@@ -12,18 +12,21 @@ import (
 )
 
 type Resolver struct {
-	db  *gorm.DB
-	rdb *redis.Client
+	db     *gorm.DB
+	rdb    *redis.Client
+	config internal.AppConfig
 }
 
-func NewResolver(db *gorm.DB) resolver.AppResolver {
+func NewResolver(db *gorm.DB, rdb *redis.Client, config internal.AppConfig) resolver.AppResolver {
 	return Resolver{
-		db: db,
+		db:     db,
+		rdb:    rdb,
+		config: config,
 	}
 }
 
-func (r Resolver) CreateAppService(appTransaction transaction.AppTransaction, config *internal.AppConfig) service.AppService {
-	return CreateAppService(appTransaction, config)
+func (r Resolver) CreateAppService(appTransaction transaction.AppTransaction) service.AppService {
+	return CreateAppService(appTransaction, &r.config)
 }
 
 func (r Resolver) CreateAppTransaction(ctx context.Context) transaction.AppTransaction {

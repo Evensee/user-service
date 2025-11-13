@@ -11,26 +11,25 @@ import (
 	api "github.com/Evensee/user-service/internal/delivery/grpc"
 	"github.com/Evensee/user-service/internal/dependency"
 	"github.com/Evensee/user-service/internal/infrastructure/database"
+	"github.com/Evensee/user-service/internal/infrastructure/memory"
 	"google.golang.org/grpc"
 )
 
 func main() {
 	const op = "UserServiceGrpc.Run"
-	dbConfig, err := internal.LoadDatabaseConfig()
 
-	if err != nil {
-		panic(err)
-	}
-
-	appConfig := internal.MustLoadConfig[internal.AppConfig]()
-
+	dbConfig := internal.MustLoadConfig[internal.DatabaseConfig]()
 	db := database.Connect(dbConfig)
+
+	redisConfig := internal.MustLoadConfig[internal.RedisConfig]()
+	rdb := memory.Connect(redisConfig)
 
 	grpcServer := grpc.NewServer(grpc.UnaryInterceptor(
 		api.LoggingInterceptor,
 	))
 
-	appResolver := dependency.NewResolver(db)
+	appConfig := internal.MustLoadConfig[internal.AppConfig]()
+	appResolver := dependency.NewResolver(db, rdb, *appConfig)
 
 	userGrpcService := api.New(appResolver)
 

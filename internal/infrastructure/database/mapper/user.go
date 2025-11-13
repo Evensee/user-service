@@ -43,6 +43,6 @@ func CreateUserToOrm(createUser *user.CreateUser) *model.UserORMModel {
 		Email:          createUser.Email,
 		FirstName:      createUser.FirstName,
 		LastName:       createUser.LastName,
-		HashedPassword: *createUser.Password,
+		HashedPassword: createUser.Password,
 	}
 }

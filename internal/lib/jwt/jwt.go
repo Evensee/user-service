@@ -58,10 +58,10 @@ func GenerateOAuthTokens(u *user.User, appConfig *internal.AppConfig) (
 }
 
 func ValidateAccessToken(
-	tokenStr string, 
-	appConfig *internal.AppConfig
+	tokenStr string,
+	appConfig *internal.AppConfig,
 ) (
-	uid uuid.UUID, 
+	*uuid.UUID,
 	error,
 ) {
 	token, err := jwt.ParseWithClaims(
@@ -69,22 +69,26 @@ func ValidateAccessToken(
 		&jwt.MapClaims{},
 		func(token *jwt.Token) (any, error) {
 			return []byte(appConfig.Secret), nil
-		}
+		},
 	)
 	if err != nil {
 		return nil, err
 	}
 
-	claims, ok := token.Claims.(*jwt.MapClaims)
+	claims, ok := token.Claims.(jwt.MapClaims)
 	if !ok || !token.Valid {
 		return nil, errors.New("invalid token")
 	}
-	
-	userId := claims["uid"]
+
+	userId, ok := claims["uid"].(string)
+	if !ok {
+		return nil, errors.New("invalid user id")
+	}
+
 	userUUID, err := uuid.Parse(userId)
 	if err != nil {
 		return nil, err
 	}
 
-	return userUUID, nil
+	return &userUUID, nil
 }

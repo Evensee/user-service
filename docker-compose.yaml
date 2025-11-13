@@ -4,13 +4,13 @@ services:
         container_name: user_service_database
         restart: unless-stopped
         ports:
-            - "5432:${POSTGRES_PORT}"
+            - "${POSTGRES_PORT}:5432"
         environment:
             POSTGRES_USER: ${POSTGRES_USER}
             POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
             POSTGRES_DB: ${POSTGRES_DB}
         volumes:
-            - pgdata:/var/lib/postgresql/data
+            - pgdata:/var/lib/postgresql
         networks:
             - local-network
     redis:
