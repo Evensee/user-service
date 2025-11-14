@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/Evensee/user-service/internal/domain/user"
 	"github.com/Evensee/user-service/internal/infrastructure/database/mapper"
@@ -17,10 +18,13 @@ type UserRepository struct {
 
 type Ctx = context.Context
 
-func NewUserRepository(db *gorm.DB) user.Repository {
-	return UserRepository{
+func NewUserRepository(db *gorm.DB) *user.Repository {
+	instance := &UserRepository{
 		db: db,
 	}
+
+	fmt.Printf("repo instance on create %p \n", instance)
+	return instance
 }
 
 func (r UserRepository) CreateUser(
@@ -28,12 +32,15 @@ func (r UserRepository) CreateUser(
 ) (*user.User, error) {
 	userModel := mapper.MapToOrm(createUser)
 
+	fmt.Printf("repo create user: %v", createUser)
+	fmt.Printf("repo orm user: %v", userModel)
+
 	result := r.db.Create(&userModel)
 
 	return mapper.MapToDomain(&userModel), result.Error
 }
 
-func (r UserRepository) GetUsers(
+func (r UserRepository) GetAll(
 	findUser user.FindUser,
 ) (*[]user.User, error) {
 	users := make([]model.UserORMModel, 0)
@@ -56,18 +63,14 @@ func (r UserRepository) GetUsers(
 	return &mappedUsers, result.Error
 }
 
-func (r UserRepository) GetUser(userId uuid.UUID) (*user.User, error) {
-	u := model.UserORMModel{
-		ID: userId,
-	}
-
-	result := r.db.First(&u)
+func (r UserRepository) GetOne(findUser *user.FindUser) (*user.User, error) {
+	result := r.db.First(findUser)
 
 	if result.Error != nil {
 		panic(result.Error)
 	}
 
-	return mapper.MapToDomain(&u), result.Error
+	return mapper.MapToDomain(*findUser), result.Error
 }
 
 func (r UserRepository) UpdateUser(

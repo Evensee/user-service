@@ -21,6 +21,7 @@ type serverApi struct {
 func New(appResolver resolver.AppResolver) *serverApi {
 	return &serverApi{
 		appResolver: appResolver,
+		handler:     handler.New(appResolver),
 	}
 }
 

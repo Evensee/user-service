@@ -1,6 +1,10 @@
 package user
 
-import "github.com/google/uuid"
+import (
+	"fmt"
+
+	"github.com/google/uuid"
+)
 
 type DomainUserService struct {
 	userRepo Repository
@@ -17,6 +21,10 @@ func (s *DomainUserService) Create(ctx Ctx, createUser *CreateUser) (*User, erro
 	if err != nil {
 		panic(err)
 	}
+	fmt.Printf("service create user: %v \n", createUserModel)
+
+	fmt.Printf("repo in service %p \n", &s.userRepo)
+
 	user, err := s.userRepo.Create(ctx, createUserModel)
 	if err != nil {
 		panic(err)

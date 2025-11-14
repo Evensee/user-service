@@ -28,6 +28,8 @@ func CreateAppService(appTransaction transaction.AppTransaction, config *interna
 	db := appTransaction.GetOrmTx()
 	rdb := appTransaction.GetMemoryTx()
 
+	println("CreateAppService")
+
 	return AppService{
 		dbConnection: db,
 		userService: *user.NewUserDomainService(
