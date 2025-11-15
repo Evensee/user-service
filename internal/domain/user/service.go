@@ -1,7 +1,8 @@
 package user
 
 import (
-	"fmt"
+	"errors"
+	"net/mail"
 
 	"github.com/google/uuid"
 )
@@ -21,9 +22,10 @@ func (s *DomainUserService) Create(createUser *CreateUser) (*User, error) {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Printf("service create user: %v \n", createUserModel)
 
-	fmt.Printf("repo in service %p \n", &s.userRepo)
+	if _, err = mail.ParseAddress(createUser.Email); err != nil {
+		panic(errors.New("provided email is invalid"))
+	}
 
 	user, err := s.userRepo.CreateUser(createUserModel)
 	if err != nil {

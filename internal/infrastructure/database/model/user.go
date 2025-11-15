@@ -11,7 +11,7 @@ type UserORMModel struct {
 	ID             *uuid.UUID `gorm:"type:uuid;default:uuid_generate_v4();primaryKey"`
 	FirstName      *string
 	LastName       *string
-	Email          *string
+	Email          *string `gorm:"unique"`
 	AvatarUrl      *string
 	HashedPassword *string
 

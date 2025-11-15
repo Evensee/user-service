@@ -55,8 +55,10 @@ func (s *ServerApi) CreateUser(ctx context.Context, req *p.CreateUserRequest) (*
 		createUserModel := mapper.MapCreateUserGrpcToDomainModel(req)
 		user, err := userService.Create(createUserModel)
 		if err != nil {
-			return new(p.UserResponse), nil
+			panic(err)
 		}
+
+		println("After panic")
 
 		return mapper.MapUserDomainToGrpcModel(user), nil
 	}

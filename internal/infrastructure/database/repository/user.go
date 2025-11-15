@@ -1,8 +1,6 @@
 package repository
 
 import (
-	"fmt"
-
 	"github.com/Evensee/user-service/internal/domain/user"
 	"github.com/Evensee/user-service/internal/infrastructure/database/mapper"
 	"github.com/Evensee/user-service/internal/infrastructure/database/model"
@@ -25,9 +23,6 @@ func (r UserRepository) CreateUser(
 	createUser *user.User,
 ) (*user.User, error) {
 	userModel := mapper.MapToOrm(createUser)
-
-	fmt.Printf("repo create user: %v", createUser)
-	fmt.Printf("repo orm user: %v", userModel)
 
 	result := r.db.Create(&userModel)
 
