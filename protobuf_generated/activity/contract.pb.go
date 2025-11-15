@@ -707,14 +707,15 @@ const file_activity_contract_proto_rawDesc = "" +
 	"\x10ActivityResponse\x12.\n" +
 	"\x04data\x18\x01 \x01(\v2\x1a.activity_service.ActivityR\x04data\"D\n" +
 	"\x12ActivitiesResponse\x12.\n" +
-	"\x04data\x18\x01 \x03(\v2\x1a.activity_service.ActivityR\x04data2\xc5\x04\n" +
+	"\x04data\x18\x01 \x03(\v2\x1a.activity_service.ActivityR\x04data2\x84\x05\n" +
 	"\x0fActivityService\x12]\n" +
 	"\x0eCreateActivity\x12'.activity_service.CreateActivityRequest\x1a\".activity_service.ActivityResponse\x12]\n" +
 	"\rGetActivities\x12&.activity_service.GetActivitiesRequest\x1a$.activity_service.ActivitiesResponse\x12W\n" +
 	"\vGetActivity\x12$.activity_service.GetActivityRequest\x1a\".activity_service.ActivityResponse\x12]\n" +
 	"\x0eUpdateActivity\x12'.activity_service.UpdateActivityRequest\x1a\".activity_service.ActivityResponse\x12Q\n" +
 	"\x0eDeleteActivity\x12'.activity_service.DeleteActivityRequest\x1a\x16.google.protobuf.Empty\x12i\n" +
-	"\x14RegisterUserActivity\x12-.activity_service.RegisterUserActivityRequest\x1a\".activity_service.ActivityResponseB:Z8https://github.com/Evensee/protobuf-definitions/activityb\x06proto3"
+	"\x14RegisterUserActivity\x12-.activity_service.RegisterUserActivityRequest\x1a\".activity_service.ActivityResponse\x12=\n" +
+	"\vHealthCheck\x12\x16.google.protobuf.Empty\x1a\x16.google.protobuf.EmptyB:Z8https://github.com/Evensee/protobuf-definitions/activityb\x06proto3"
 
 var (
 	file_activity_contract_proto_rawDescOnce sync.Once
@@ -761,14 +762,16 @@ var file_activity_contract_proto_depIdxs = []int32{
 	6,  // 13: activity_service.ActivityService.UpdateActivity:input_type -> activity_service.UpdateActivityRequest
 	7,  // 14: activity_service.ActivityService.DeleteActivity:input_type -> activity_service.DeleteActivityRequest
 	8,  // 15: activity_service.ActivityService.RegisterUserActivity:input_type -> activity_service.RegisterUserActivityRequest
-	9,  // 16: activity_service.ActivityService.CreateActivity:output_type -> activity_service.ActivityResponse
-	10, // 17: activity_service.ActivityService.GetActivities:output_type -> activity_service.ActivitiesResponse
-	9,  // 18: activity_service.ActivityService.GetActivity:output_type -> activity_service.ActivityResponse
-	9,  // 19: activity_service.ActivityService.UpdateActivity:output_type -> activity_service.ActivityResponse
-	12, // 20: activity_service.ActivityService.DeleteActivity:output_type -> google.protobuf.Empty
-	9,  // 21: activity_service.ActivityService.RegisterUserActivity:output_type -> activity_service.ActivityResponse
-	16, // [16:22] is the sub-list for method output_type
-	10, // [10:16] is the sub-list for method input_type
+	12, // 16: activity_service.ActivityService.HealthCheck:input_type -> google.protobuf.Empty
+	9,  // 17: activity_service.ActivityService.CreateActivity:output_type -> activity_service.ActivityResponse
+	10, // 18: activity_service.ActivityService.GetActivities:output_type -> activity_service.ActivitiesResponse
+	9,  // 19: activity_service.ActivityService.GetActivity:output_type -> activity_service.ActivityResponse
+	9,  // 20: activity_service.ActivityService.UpdateActivity:output_type -> activity_service.ActivityResponse
+	12, // 21: activity_service.ActivityService.DeleteActivity:output_type -> google.protobuf.Empty
+	9,  // 22: activity_service.ActivityService.RegisterUserActivity:output_type -> activity_service.ActivityResponse
+	12, // 23: activity_service.ActivityService.HealthCheck:output_type -> google.protobuf.Empty
+	17, // [17:24] is the sub-list for method output_type
+	10, // [10:17] is the sub-list for method input_type
 	10, // [10:10] is the sub-list for extension type_name
 	10, // [10:10] is the sub-list for extension extendee
 	0,  // [0:10] is the sub-list for field type_name

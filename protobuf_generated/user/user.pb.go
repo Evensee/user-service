@@ -545,7 +545,7 @@ const file_user_user_proto_rawDesc = "" +
 	"\x16ValidateTokensResponse\x12\x17\n" +
 	"\auser_id\x18\x01 \x01(\tR\x06userId\";\n" +
 	"\x14RefreshTokensRequest\x12#\n" +
-	"\rrefresh_token\x18\x01 \x01(\tR\frefreshToken2\xd0\x02\n" +
+	"\rrefresh_token\x18\x01 \x01(\tR\frefreshToken2\x8f\x03\n" +
 	"\vUserService\x121\n" +
 	"\vGetUserById\x12\x13.GetUserByIdRequest\x1a\r.UserResponse\x12/\n" +
 	"\n" +
@@ -554,7 +554,8 @@ const file_user_user_proto_rawDesc = "" +
 	"\n" +
 	"LogoutUser\x12\x0e.LogoutRequest\x1a\x16.google.protobuf.Empty\x12A\n" +
 	"\x0eValidateTokens\x12\x16.ValidateTokensRequest\x1a\x17.ValidateTokensResponse\x127\n" +
-	"\rRefreshTokens\x12\x15.RefreshTokensRequest\x1a\x0f.TokensResponseB6Z4https://github.com/Evensee/protobuf-definitions/userb\x06proto3"
+	"\rRefreshTokens\x12\x15.RefreshTokensRequest\x1a\x0f.TokensResponse\x12=\n" +
+	"\vHealthCheck\x12\x16.google.protobuf.Empty\x1a\x16.google.protobuf.EmptyB6Z4https://github.com/Evensee/protobuf-definitions/userb\x06proto3"
 
 var (
 	file_user_user_proto_rawDescOnce sync.Once
@@ -588,14 +589,16 @@ var file_user_user_proto_depIdxs = []int32{
 	5, // 3: UserService.LogoutUser:input_type -> LogoutRequest
 	6, // 4: UserService.ValidateTokens:input_type -> ValidateTokensRequest
 	8, // 5: UserService.RefreshTokens:input_type -> RefreshTokensRequest
-	0, // 6: UserService.GetUserById:output_type -> UserResponse
-	0, // 7: UserService.CreateUser:output_type -> UserResponse
-	4, // 8: UserService.LoginUser:output_type -> TokensResponse
-	9, // 9: UserService.LogoutUser:output_type -> google.protobuf.Empty
-	7, // 10: UserService.ValidateTokens:output_type -> ValidateTokensResponse
-	4, // 11: UserService.RefreshTokens:output_type -> TokensResponse
-	6, // [6:12] is the sub-list for method output_type
-	0, // [0:6] is the sub-list for method input_type
+	9, // 6: UserService.HealthCheck:input_type -> google.protobuf.Empty
+	0, // 7: UserService.GetUserById:output_type -> UserResponse
+	0, // 8: UserService.CreateUser:output_type -> UserResponse
+	4, // 9: UserService.LoginUser:output_type -> TokensResponse
+	9, // 10: UserService.LogoutUser:output_type -> google.protobuf.Empty
+	7, // 11: UserService.ValidateTokens:output_type -> ValidateTokensResponse
+	4, // 12: UserService.RefreshTokens:output_type -> TokensResponse
+	9, // 13: UserService.HealthCheck:output_type -> google.protobuf.Empty
+	7, // [7:14] is the sub-list for method output_type
+	0, // [0:7] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
 	0, // [0:0] is the sub-list for extension extendee
 	0, // [0:0] is the sub-list for field type_name

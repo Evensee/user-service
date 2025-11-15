@@ -39,7 +39,7 @@ func (s *AuthService) LoginUser(ctx Ctx, email, password string) (Tokens, error)
 	}
 
 	if security.VerifyPassword(password, u.HashedPassword) {
-		return Tokens{}, errors.New("invalid credentials")
+		return Tokens{}, errors.New("invalid password")
 	}
 
 	access, err := jwt.GenerateAccessToken(u, s.appConfig)
