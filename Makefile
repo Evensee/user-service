@@ -40,3 +40,6 @@ http:
 
 migrate:
 	go run cmd/migrate/main.go
+
+update_submodules:
+	git submodule update --force --remote --init --recursive
