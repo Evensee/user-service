@@ -2,12 +2,13 @@ package auth
 
 import (
 	"context"
-	"errors"
 
 	"github.com/Evensee/user-service/internal"
 	"github.com/Evensee/user-service/internal/domain/user"
 	"github.com/Evensee/user-service/internal/lib/jwt"
 	"github.com/Evensee/user-service/internal/lib/security"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 type Ctx = context.Context
@@ -38,8 +39,8 @@ func (s *AuthService) LoginUser(ctx Ctx, email, password string) (Tokens, error)
 		return Tokens{}, err
 	}
 
-	if security.VerifyPassword(password, u.HashedPassword) {
-		return Tokens{}, errors.New("invalid password")
+	if !security.VerifyPassword(password, u.HashedPassword) {
+		return Tokens{}, status.Error(codes.Unauthenticated, "invalid password")
 	}
 
 	access, err := jwt.GenerateAccessToken(u, s.appConfig)
@@ -73,7 +74,7 @@ func (s *AuthService) RefreshTokens(ctx Ctx, refreshToken string) (Tokens, error
 	userIdFromBlocklist, err := s.tokenRepo.CheckRefreshTokenBlocked(ctx, refreshToken)
 
 	if userIdFromBlocklist != nil && err == nil {
-		panic("refresh token was blocked")
+		panic(status.Error(codes.Unauthenticated, "refresh token was blocked"))
 	}
 
 	u, err := s.userRepo.GetOne(&user.FindUser{

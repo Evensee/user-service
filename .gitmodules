@@ -1,3 +1,6 @@
 [submodule "protobuf-definitions"]
 	path = protobuf-definitions
 	url = ../protobuf-definitions
+[submodule "go-tl"]
+	path = go-tl
+	url = ../go-tl

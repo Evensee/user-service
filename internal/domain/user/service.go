@@ -1,10 +1,11 @@
 package user
 
 import (
-	"errors"
 	"net/mail"
 
 	"github.com/google/uuid"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 type DomainUserService struct {
@@ -24,7 +25,7 @@ func (s *DomainUserService) Create(createUser *CreateUser) (*User, error) {
 	}
 
 	if _, err = mail.ParseAddress(createUser.Email); err != nil {
-		panic(errors.New("provided email is invalid"))
+		panic(status.Error(codes.InvalidArgument, "provided email is invalid"))
 	}
 
 	user, err := s.userRepo.CreateUser(createUserModel)

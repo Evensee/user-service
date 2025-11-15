@@ -44,6 +44,7 @@ func (s *ServerApi) GetUserById(ctx context.Context, req *p.GetUserByIdRequest) 
 
 	return resolvedHandler(ctx, req)
 }
+
 func (s *ServerApi) CreateUser(ctx context.Context, req *p.CreateUserRequest) (*p.UserResponse, error) {
 	handler := func(
 		ctx Ctx,
@@ -57,9 +58,6 @@ func (s *ServerApi) CreateUser(ctx context.Context, req *p.CreateUserRequest) (*
 		if err != nil {
 			panic(err)
 		}
-
-		println("After panic")
-
 		return mapper.MapUserDomainToGrpcModel(user), nil
 	}
 

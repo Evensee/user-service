@@ -7,6 +7,7 @@ require (
 	github.com/golang-jwt/jwt/v5 v5.3.0
 	github.com/google/uuid v1.6.0
 	github.com/joho/godotenv v1.5.1
+	github.com/redis/go-redis/v9 v9.16.0
 	go-simpler.org/env v0.12.0
 	golang.org/x/crypto v0.40.0
 	google.golang.org/grpc v1.76.0
@@ -14,6 +15,8 @@ require (
 	gorm.io/driver/postgres v1.6.0
 	gorm.io/gorm v1.31.1
 )
+
+replace github.com/evensee/go-tl v0.0.10 => ./go-tl
 
 require (
 	github.com/andybalholm/brotli v1.1.0 // indirect
@@ -30,7 +33,6 @@ require (
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/mattn/go-runewidth v0.0.16 // indirect
-	github.com/redis/go-redis/v9 v9.16.0 // indirect
 	github.com/rivo/uniseg v0.2.0 // indirect
 	github.com/stretchr/testify v1.10.0 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
