@@ -31,7 +31,7 @@ func NewAuthService(
 }
 
 func (s *AuthService) LoginUser(ctx Ctx, email, password string) (Tokens, error) {
-	u, err := s.userRepo.GetOne(ctx, &user.FindUser{
+	u, err := s.userRepo.GetOne(&user.FindUser{
 		Email: &email,
 	})
 	if err != nil {
@@ -76,7 +76,7 @@ func (s *AuthService) RefreshTokens(ctx Ctx, refreshToken string) (Tokens, error
 		panic("refresh token was blocked")
 	}
 
-	u, err := s.userRepo.GetOne(ctx, &user.FindUser{
+	u, err := s.userRepo.GetOne(&user.FindUser{
 		ID: &userID,
 	})
 	if err != nil {
@@ -120,7 +120,7 @@ func (s *AuthService) ValidateAccessToken(ctx Ctx, accessToken string) (*user.Us
 		return nil, err
 	}
 
-	u, err := s.userRepo.GetOne(ctx, &user.FindUser{
+	u, err := s.userRepo.GetOne(&user.FindUser{
 		ID: userId,
 	})
 	if err != nil {

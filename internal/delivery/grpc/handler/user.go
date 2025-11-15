@@ -29,7 +29,7 @@ func (s *ServerApi) GetUserById(ctx context.Context, req *p.GetUserByIdRequest) 
 			panic(err)
 		}
 
-		user, err := userService.GetOne(ctx, &user.FindUser{
+		user, err := userService.GetOne(&user.FindUser{
 			ID: &userId,
 		})
 
@@ -53,7 +53,7 @@ func (s *ServerApi) CreateUser(ctx context.Context, req *p.CreateUserRequest) (*
 		userService := appService.GetUserService()
 
 		createUserModel := mapper.MapCreateUserGrpcToDomainModel(req)
-		user, err := userService.Create(ctx, createUserModel)
+		user, err := userService.Create(createUserModel)
 		if err != nil {
 			return new(p.UserResponse), nil
 		}

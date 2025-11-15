@@ -1,7 +1,6 @@
 package repository
 
 import (
-	"context"
 	"fmt"
 
 	"github.com/Evensee/user-service/internal/domain/user"
@@ -16,15 +15,10 @@ type UserRepository struct {
 	user.Repository
 }
 
-type Ctx = context.Context
-
-func NewUserRepository(db *gorm.DB) *user.Repository {
-	instance := &UserRepository{
+func NewUserRepository(db *gorm.DB) user.Repository {
+	return &UserRepository{
 		db: db,
 	}
-
-	fmt.Printf("repo instance on create %p \n", instance)
-	return instance
 }
 
 func (r UserRepository) CreateUser(
@@ -41,7 +35,7 @@ func (r UserRepository) CreateUser(
 }
 
 func (r UserRepository) GetAll(
-	findUser user.FindUser,
+	findUser *user.FindUser,
 ) (*[]user.User, error) {
 	users := make([]model.UserORMModel, 0)
 
@@ -64,13 +58,15 @@ func (r UserRepository) GetAll(
 }
 
 func (r UserRepository) GetOne(findUser *user.FindUser) (*user.User, error) {
-	result := r.db.First(findUser)
+	u := mapper.MapFindToOrm(*findUser)
+
+	result := r.db.First(u)
 
 	if result.Error != nil {
 		panic(result.Error)
 	}
 
-	return mapper.MapToDomain(*findUser), result.Error
+	return mapper.MapToDomain(u), result.Error
 }
 
 func (r UserRepository) UpdateUser(
@@ -78,7 +74,7 @@ func (r UserRepository) UpdateUser(
 	updateUser *user.UpdateUser,
 ) (*user.User, error) {
 	u := model.UserORMModel{
-		ID: userId,
+		ID: &userId,
 	}
 
 	result := r.db.Model(&u).Where("id = ?", userId).Updates(updateUser)
@@ -91,7 +87,7 @@ func (r UserRepository) DeleteUser(
 	userId uuid.UUID,
 ) error {
 	u := model.UserORMModel{
-		ID: userId,
+		ID: &userId,
 	}
 	r.db.First(&u)
 	result := r.db.Delete(&u)

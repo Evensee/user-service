@@ -16,7 +16,7 @@ func NewUserDomainService(
 	return &DomainUserService{userRepo: userRepo}
 }
 
-func (s *DomainUserService) Create(ctx Ctx, createUser *CreateUser) (*User, error) {
+func (s *DomainUserService) Create(createUser *CreateUser) (*User, error) {
 	createUserModel, err := NewUser(createUser)
 	if err != nil {
 		panic(err)
@@ -25,7 +25,7 @@ func (s *DomainUserService) Create(ctx Ctx, createUser *CreateUser) (*User, erro
 
 	fmt.Printf("repo in service %p \n", &s.userRepo)
 
-	user, err := s.userRepo.Create(ctx, createUserModel)
+	user, err := s.userRepo.CreateUser(createUserModel)
 	if err != nil {
 		panic(err)
 	}
@@ -33,16 +33,16 @@ func (s *DomainUserService) Create(ctx Ctx, createUser *CreateUser) (*User, erro
 	return user, err
 }
 
-func (s *DomainUserService) Update(ctx Ctx, user_id uuid.UUID, updateUser *UpdateUser) (*User, error) {
-	user, err := s.userRepo.Update(ctx, user_id, updateUser)
+func (s *DomainUserService) Update(user_id uuid.UUID, updateUser *UpdateUser) (*User, error) {
+	user, err := s.userRepo.Update(user_id, updateUser)
 	if err != nil {
 		panic(err)
 	}
 	return user, err
 }
 
-func (s *DomainUserService) GetAll(ctx Ctx, findUser *FindUser) (*[]User, error) {
-	users, err := s.userRepo.GetAll(ctx, findUser)
+func (s *DomainUserService) GetAll(findUser *FindUser) (*[]User, error) {
+	users, err := s.userRepo.GetAll(findUser)
 
 	if err != nil {
 		panic(err)
@@ -51,8 +51,8 @@ func (s *DomainUserService) GetAll(ctx Ctx, findUser *FindUser) (*[]User, error)
 	return users, err
 }
 
-func (s *DomainUserService) GetOne(ctx Ctx, findUser *FindUser) (*User, error) {
-	user, err := s.userRepo.GetOne(ctx, findUser)
+func (s *DomainUserService) GetOne(findUser *FindUser) (*User, error) {
+	user, err := s.userRepo.GetOne(findUser)
 
 	if err != nil {
 		panic(err)
