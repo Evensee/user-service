@@ -2,6 +2,7 @@ package memory
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/Evensee/user-service/internal"
 	"github.com/redis/go-redis/v9"
@@ -11,7 +12,7 @@ type C = redis.Client
 
 func Connect(config *internal.RedisConfig) *C {
 	rdb := redis.NewClient(&redis.Options{
-		Addr:     config.Host,
+		Addr:     fmt.Sprintf("%s:%d", config.Host, config.Port),
 		Password: config.Password,
 		DB:       config.Db,
 	})
