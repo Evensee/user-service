@@ -2,6 +2,7 @@ package auth
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/Evensee/user-service/internal"
 	"github.com/Evensee/user-service/internal/domain/user"
@@ -35,6 +36,8 @@ func (s *AuthService) LoginUser(ctx Ctx, email, password string) (Tokens, error)
 	u, err := s.userRepo.GetOne(&user.FindUser{
 		Email: &email,
 	})
+	fmt.Printf("user: %v", u)
+
 	if err != nil {
 		return Tokens{}, err
 	}

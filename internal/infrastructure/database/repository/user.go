@@ -54,8 +54,7 @@ func (r UserRepository) GetAll(
 
 func (r UserRepository) GetOne(findUser *user.FindUser) (*user.User, error) {
 	u := mapper.MapFindToOrm(*findUser)
-
-	result := r.db.First(u)
+	result := r.db.Where(u).First(u)
 
 	if result.Error != nil {
 		panic(result.Error)
