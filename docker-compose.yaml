@@ -1,36 +1,35 @@
 services:
-    database:
-        image: postgres:18
-        container_name: user_service_database
-        restart: unless-stopped
-        ports:
-            - "${POSTGRES_PORT}:5432"
-        environment:
-            POSTGRES_USER: ${POSTGRES_USER}
-            POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-            POSTGRES_DB: ${POSTGRES_DB}
-        volumes:
-            - pgdata:/var/lib/postgresql
-        networks:
-            - local-network
-    redis:
-        image: redis:8
-        container_name: user_service_redis
-        restart: unless-stopped
-        ports:
-            - "6379:${REDIS_PORT}"
-        environment:
-            REDIS_PASSWORD: ${REDIS_PASSWORD}
-            REDIS_PORT: ${REDIS_PORT}
-            REDIS_DATABASES: ${REDIS_DATABASES}
-        volumes:
-            - redisdata:/data
-        command: redis-server --appendonly yes
+  database:
+    image: postgres:18
+    container_name: user_service_database
+    restart: unless-stopped
+    ports:
+      - "${POSTGRES_PORT}:5432"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - pgdata:/var/lib/postgresql
+    networks:
+      - local-network
+  redis:
+    image: redis:8
+    container_name: user_service_redis
+    restart: unless-stopped
+    ports:
+      - "${REDIS_PORT}:6379"
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      REDIS_DATABASES: ${REDIS_DATABASES}
+    volumes:
+      - redisdata:/data
+    command: redis-server --appendonly yes
 
 volumes:
-    shared-volume:
-    pgdata:
-    redisdata:
+  shared-volume:
+  pgdata:
+  redisdata:
 
 networks:
-    local-network:
+  local-network:
