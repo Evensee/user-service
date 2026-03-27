@@ -2,6 +2,8 @@ package internal
 
 import (
 	"fmt"
+
+	"github.com/evensee/go-tl/dotenv"
 	"github.com/joho/godotenv"
 	"go-simpler.org/env"
 )
@@ -30,4 +32,27 @@ func LoadDatabaseConfig() (*DatabaseConfig, error) {
 	}
 
 	return databaseConfig, nil
+}
+
+type AppConfig struct {
+	Secret string `env:"APP_SECRET"`
+
+	GrpcApiPort int `env:"USER_SERVICE_GRPC_API_PORT"`
+	HttpApiPort int `env:"USER_SERVICE_HTTP_API_PORT"`
+
+	AccessTokenLifetimeSeconds  int `env:"ACCESS_TOKEN_LIFETIME_SECONDS"`
+	RefreshTokenLifetimeSeconds int `env:"REFRESH_TOKEN_LIFETIME_SECONDS"`
+}
+
+type RedisConfig struct {
+	Host     string `env:"REDIS_HOST"`
+	Port     int    `env:"REDIS_PORT"`
+	Password string `env:"REDIS_PASSWORD"`
+	Db int `env:"REDIS_DB"`
+}
+
+func MustLoadConfig[C any]() *C {
+	config := dotenv.MakeConfig(new(C))
+
+	return config
 }

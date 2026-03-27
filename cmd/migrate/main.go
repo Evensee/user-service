@@ -1,23 +1,22 @@
 package main
 
 import (
+	"log"
+
 	"github.com/Evensee/user-service/internal"
 	"github.com/Evensee/user-service/internal/infrastructure/database"
 	"github.com/Evensee/user-service/internal/infrastructure/database/model"
-	"log"
 )
 
 func main() {
-	databaseConfig, err := internal.LoadDatabaseConfig()
+	databaseConfig := internal.MustLoadConfig[internal.DatabaseConfig]()
 
-	if err != nil {
-		panic(err)
-	}
+	db := database.Connect(databaseConfig)
 
-	connection := database.Connect(*databaseConfig)
+	db.Exec("CREATE EXTENSION IF NOT EXISTS \"uuid-ossp\";")
 
-	if err = connection.AutoMigrate(&model.UserORMModel{}); err != nil {
-		log.Fatalf("failed to run migration: %w", err)
+	if err := db.AutoMigrate(&model.UserORMModel{}); err != nil {
+		log.Fatalf("failed to run migration: %v", err)
 	}
 
 }
