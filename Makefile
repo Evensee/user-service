@@ -3,8 +3,12 @@ PROTO_DIR = protobuf-definitions
 OUT_DIR = protobuf_generated
 
 
-PROTOC_GEN_GO = $(shell go env GOPATH)/bin/protoc-gen-go
-PROTOC_GEN_GO_GRPC = $(shell go env GOPATH)/bin/protoc-gen-go-grpc
+GO_BIN_DIR := $(shell go env GOBIN)
+ifeq ($(strip $(GO_BIN_DIR)),)
+GO_BIN_DIR := $(shell go env GOPATH)/bin
+endif
+PROTOC_GEN_GO = $(GO_BIN_DIR)/protoc-gen-go
+PROTOC_GEN_GO_GRPC = $(GO_BIN_DIR)/protoc-gen-go-grpc
 
 .PHONY: proto clean deps
 
@@ -19,6 +23,8 @@ proto:
 	@echo "🚀 Generating Go code from proto files..."
 	@mkdir -p $(OUT_DIR)
 	@$(PROTOC) \
+		--plugin=protoc-gen-go=$(PROTOC_GEN_GO) \
+		--plugin=protoc-gen-go-grpc=$(PROTOC_GEN_GO_GRPC) \
 		--proto_path=$(PROTO_DIR) \
 		--go_out=$(OUT_DIR) \
 		--go-grpc_out=$(OUT_DIR) \
@@ -33,6 +39,10 @@ clean:
 
 
 grpc:
+	go run cmd/api/grpc/main.go
+
+grpcup:
+	docker compose up -d
 	go run cmd/api/grpc/main.go
 
 http:

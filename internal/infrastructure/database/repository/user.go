@@ -57,7 +57,7 @@ func (r UserRepository) GetOne(findUser *user.FindUser) (*user.User, error) {
 	result := r.db.Where(u).First(u)
 
 	if result.Error != nil {
-		panic(result.Error)
+		return nil, result.Error
 	}
 
 	return mapper.MapToDomain(u), result.Error

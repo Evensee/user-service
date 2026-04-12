@@ -26,18 +26,19 @@ func (s *DomainUserService) Create(createUser *CreateUser) (*User, error) {
 		panic(err)
 	}
 
+	println("Looking for user with the same email!")
 	if _, err = mail.ParseAddress(createUser.Email); err != nil {
 		panic(status.Error(codes.InvalidArgument, "provided email is invalid"))
 	}
 
-	userWithSameEmail, err := s.userRepo.GetOne(
+	userWithSameEmail, _ := s.userRepo.GetOne(
 		&FindUser{Email: &createUser.Email},
 	)
 
 	if userWithSameEmail != nil {
 		panic(status.Error(codes.InvalidArgument, "provided email is used"))
 	}
-
+	println("User with email not has been found, creating new \n")
 	user, err := s.userRepo.CreateUser(createUserModel)
 	if err != nil {
 		panic(err)
